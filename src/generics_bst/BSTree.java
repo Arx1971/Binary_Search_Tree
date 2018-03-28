@@ -3,21 +3,24 @@ package generics_bst;
 import java.util.LinkedList;
 import java.util.Queue;
 
+/* Create A class BSTree and extend Comparable to use comparableTo method. */
+
 public class BSTree<T extends Comparable<T>> {
 
+	/* Tree Class define the structure of BST */
 	private static class Tree<T> {
-		T data;
-		Tree<T> right, left;
+		T data; // data is T type variable
+		Tree<T> right, left; // pointer or reference variable for BST 
 
-		public Tree(T data) {
+		public Tree(T data) {	// constructor to access the data members of this class
 			this.data = data;
 			left = right = null;
 		}
 	}
 
-	private Tree<T> root;
+	private Tree<T> root; // global variable root, which is a Root of BST
 
-	public void successor(T key) {
+	public void successor(T key) {	// successor is next node of any node in inorder traversal
 		try {
 			Tree<T> scsr = successor(root, key);
 			if (scsr != null)
@@ -27,7 +30,7 @@ public class BSTree<T extends Comparable<T>> {
 		}
 	}
 
-	public void add(T newData) {
+	public void add(T newData) { // public add method to add new data into the Tree
 		root = add(root, newData);
 	}
 
