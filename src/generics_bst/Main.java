@@ -11,6 +11,7 @@ public class Main {
 		myTree.add(19);
 		myTree.add(23);
 		myTree.add(36);
+		myTree.add(36);
 		myTree.add(11);
 		myTree.add(35);
 		myTree.add(40);
@@ -37,5 +38,18 @@ public class Main {
 		System.out.println();
 		System.out.println("InOrder Traversal: ");
 		myTree.inorder();
+		System.out.println("This is a BST: "+myTree.isBST());
+		/*String Testing*/
+		
+		BSTree<String> strTree = new BSTree<>();
+		strTree.add("Oprimus Prime");
+		strTree.add("Megatron");
+		strTree.add("Ironhide");
+		strTree.add("Vectro Prime");
+		strTree.add("RamJet");
+		System.out.println("InOrder Traversal: ");
+		strTree.inorder();
+		System.out.println(myTree.isBST());
+		System.out.println(myTree.isDuplicates());
 	}
 }

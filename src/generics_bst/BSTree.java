@@ -1,7 +1,10 @@
 package generics_bst;
 
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
+import java.util.Set;
 
 /* Create A class BSTree and extend Comparable to use comparableTo method. */
 
@@ -10,9 +13,9 @@ public class BSTree<T extends Comparable<T>> {
 	/* Tree Class define the structure of BST */
 	private static class Tree<T> {
 		T data; // data is T type variable
-		Tree<T> right, left; // pointer or reference variable for BST 
+		Tree<T> right, left; // pointer or reference variable for BST
 
-		public Tree(T data) {	// constructor to access the data members of this class
+		public Tree(T data) { // constructor to access the data members of this class
 			this.data = data;
 			left = right = null;
 		}
@@ -20,7 +23,7 @@ public class BSTree<T extends Comparable<T>> {
 
 	private Tree<T> root; // global variable root, which is a Root of BST
 
-	public void successor(T key) {	// successor is next node of any node in inorder traversal
+	public void successor(T key) { // successor is next node of any node in inorder traversal
 		try {
 			Tree<T> scsr = successor(root, key);
 			if (scsr != null)
@@ -62,16 +65,21 @@ public class BSTree<T extends Comparable<T>> {
 		return minimum(root);
 	}
 
-	public void deletenode(T key){
+	public void deletenode(T key) {
 		root = deletenode(root, key);
 	}
-	
+
 	public boolean search(T key) {
 		Tree<T> fact = Tree_Search(root, key);
 		if (fact == null) {
 			return false;
 		}
 		return true;
+	}
+	
+	public boolean isBST() {
+		prev = null;
+		return isBST(root);
 	}
 
 	private Tree<T> add(Tree<T> root, T newdata) {
@@ -89,31 +97,33 @@ public class BSTree<T extends Comparable<T>> {
 	}
 
 	private T minValue(Tree<T> root) {
-		if(root.left == null) return root.data;
+		if (root.left == null)
+			return root.data;
 		return minValue(root.left);
 	}
-	
-	private Tree<T> deletenode(Tree<T> root, T key){
-		
-		if(root == null) return root;
-		
+
+	private Tree<T> deletenode(Tree<T> root, T key) {
+
+		if (root == null)
+			return root;
+
 		int cmp = root.data.compareTo(key);
-		
-		if(cmp > 0) {
+
+		if (cmp > 0) {
 			root.left = deletenode(root.left, key);
-		}
-		else if (cmp < 0) {
+		} else if (cmp < 0) {
 			root.right = deletenode(root.right, key);
-		}
-		else {
-			if(root.left == null) return root.right;
-			else if(root.right == null) return root.left;
+		} else {
+			if (root.left == null)
+				return root.right;
+			else if (root.right == null)
+				return root.left;
 			root.data = minValue(root.right);
 			root.right = deletenode(root.right, key);
-		}		
+		}
 		return root;
 	}
-	
+
 	private void inorder_traversal(Tree<T> root) {
 		if (root == null)
 			return;
@@ -150,14 +160,14 @@ public class BSTree<T extends Comparable<T>> {
 				return right + 1;
 		}
 	}
-	
 
-	
 	private void levelorder_traversal(Tree<T> root) {
 
 		if (root == null) {
 			return;
 		}
+
+		// Level order traversal can be done by sample BFS
 
 		Queue<Tree<T>> q = new LinkedList<>();
 
@@ -202,31 +212,78 @@ public class BSTree<T extends Comparable<T>> {
 
 	private Tree<T> maximum(Tree<T> root) {
 		if (root.right == null) {
-			System.out.println("Maximum Data: " + root.data);   
+			System.out.println("Maximum Data: " + root.data);
 			return root;
 		}
 		return maximum(root.right);
 	}
+	
+	private List<T> myList = new LinkedList<T>();
 
+	public boolean isBST_2() {
+		isBST_2(root);
+		T temp = myList.get(0);
+		
+		for(T i: myList) {
+			if(temp.compareTo(i) > 0) return false;	
+			temp = i;
+		}
+		return true;
+	}
+	
+	private void isBST_2(Tree<T> root) {
+		if(root == null) return;
+		isBST(root.left);
+		myList.add(root.data);
+		isBST(root.right);
+	}
+	
 	private Tree<T> successor(Tree<T> root, T key) {
 		Tree<T> newroot = Tree_Search(root, key);
 		if (newroot == null) {
 			return null;
 		}
-		if(newroot.right!=null) {
+		if (newroot.right != null) {
 			return minimum(newroot.right);
-		}else {
+		} else {
 			Tree<T> scsr = null;
 			Tree<T> anstr = root;
-			while(anstr != newroot) {
+			while (anstr != newroot) {
 				int cmp = newroot.data.compareTo(anstr.data);
-				if(cmp < 0) {
+				if (cmp < 0) {
 					scsr = anstr;
 					anstr = anstr.left;
-				}else
+				} else
 					anstr = anstr.right;
 			}
 			return scsr;
 		}
+	}
+	
+	public boolean isDuplicates() {
+		if(isDuplicates(root)) return true;
+		
+		return false;
+	}
+	
+	private Set<T> mySet = new HashSet<>();
+	
+	private boolean isDuplicates(Tree<T> root) {
+		if(root == null) return true;
+		if(!isDuplicates(root.left)) return false;
+		if(!mySet.add(root.data)) return false;
+		return isDuplicates(root.right);
+	}
+	
+	private Tree<T> prev;
+	
+	private boolean isBST(Tree<T>root) {
+		if(root!=null) {
+			if(!isBST(root.left)) return false;
+			if(prev!=null && root.data.compareTo(prev.data) <= 0) return false;
+			prev = root;
+			return isBST(root.right);
+		}
+		return true;
 	}
 }
